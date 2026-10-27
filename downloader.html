@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>AnimeLoader</title>
+    <link rel="stylesheet" href="css/ui.css">
+</head>
+<body>
+<div id="container">
+    <header id="header">
+        <span class="logo">Anime<b>Loader</b></span>
+        <button type="button" id="settingsBtn" class="icon-btn" title="Настройки">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+    </header>
+
+    <div id="message" class="message hidden"></div>
+
+    <!-- Настройки -->
+    <section id="settingsView" class="hidden">
+        <h2>Настройки</h2>
+        <p class="hint">Темп запросов к серверу видео — у каждого плеера свой. Alloha блокирует ссылку, если взять по ней больше ~40 сегментов подряд, поэтому загрузчик меняет ссылку каждые N сегментов. Не повышайте темп без нужды.</p>
+        <div class="row">
+            <label for="setPlayer">Плеер</label>
+            <select id="setPlayer">
+                <option value="kodik">Kodik</option>
+                <option value="alloha">Alloha</option>
+                <option value="cvh">CVH</option>
+                <option value="aniboom">AniBoom</option>
+            </select>
+        </div>
+        <div class="settings-grid">
+            <label for="setConc">Потоков</label>
+            <input type="number" id="setConc" min="1" max="16">
+            <label for="setDelay">Пауза между запросами, мс</label>
+            <input type="number" id="setDelay" min="0" max="10000" step="100">
+            <label for="setPerLink" title="Alloha ограничивает скорость на одну ссылку: после стольких сегментов загрузчик берёт новую. 0 — без ограничения">Сегментов на одну ссылку</label>
+            <input type="number" id="setPerLink" min="0" max="10000">
+            <label for="setEpPause">Пауза между сериями, с</label>
+            <input type="number" id="setEpPause" min="0" max="600">
+        </div>
+        <div class="row">
+            <label for="setTsFormat">Kodik сохранять как</label>
+            <select id="setTsFormat">
+                <option value="mp4">MP4 (перепаковка mux.js)</option>
+                <option value="ts">TS (как есть)</option>
+            </select>
+        </div>
+        <p class="hint">MP4 собирается после загрузки серии, поэтому вся серия временно хранится в памяти. TS пишется на диск сразу.</p>
+        <div class="btn-row">
+            <button type="button" id="settingsSave">Сохранить</button>
+            <button type="button" id="settingsReset" class="secondary">По умолчанию</button>
+        </div>
+    </section>
+
+    <!-- Основной экран -->
+    <section id="mainView">
+        <div id="titleCard" class="hidden">
+            <img id="poster" alt="">
+            <div>
+                <div id="title"></div>
+                <div id="meta"></div>
+            </div>
+        </div>
+
+        <div id="form" class="hidden">
+            <div class="row">
+                <label for="playerSelect">Плеер</label>
+                <select id="playerSelect"></select>
+            </div>
+            <div class="row">
+                <label for="dubSelect">Озвучка</label>
+                <select id="dubSelect"></select>
+            </div>
+            <div class="row">
+                <label for="qualitySelect">Качество</label>
+                <select id="qualitySelect">
+                    <option value="max">Максимальное</option>
+                    <option value="1080">1080p</option>
+                    <option value="720">720p</option>
+                    <option value="480">480p</option>
+                    <option value="360">360p</option>
+                </select>
+            </div>
+
+            <div id="rangeBox">
+                <div class="range-labels"><span>от</span><span>до</span></div>
+                <div class="range-selects">
+                    <select id="fromSelect"></select>
+                    <select id="toSelect"></select>
+                </div>
+            </div>
+
+            <div class="row check-row">
+                <label for="folderCheckbox" title="Серии сохранятся в папку с названием тайтла внутри выбранной папки. Если такая папка уже есть, файлы добавятся в неё">Создать папку с названием тайтла</label>
+                <input type="checkbox" id="folderCheckbox">
+            </div>
+
+            <div id="saveModeRow" class="row">
+                <label for="saveModeSelect">Куда сохранять</label>
+                <select id="saveModeSelect">
+                    <option value="folder">В выбранную папку</option>
+                    <option value="downloads">В «Загрузки» браузера (можно открыть папку)</option>
+                </select>
+            </div>
+            <div id="dirPicker" class="row">
+                <label>Папка</label>
+                <div class="dir-box">
+                    <span id="dirName" class="dir-name">не выбрана</span>
+                    <button type="button" id="dirBtn" class="small">Выбрать…</button>
+                </div>
+            </div>
+            <div id="dirFallback" class="row hidden">
+                <label for="subfolderInput">Папка в «Загрузках»</label>
+                <input type="text" id="subfolderInput" placeholder="можно оставить пустым">
+            </div>
+
+            <div id="infoPanel"></div>
+            <button type="button" id="downloadBtn">Скачать</button>
+        </div>
+
+        <div id="status"></div>
+        <button type="button" id="openFolderBtn" class="secondary hidden" title="Показать скачанный файл в папке">Открыть папку</button>
+        <div id="progressBox" class="hidden">
+            <div class="progress-label"><span id="epLabel">Серия</span><span id="epPercent"></span></div>
+            <progress id="epProgress" value="0" max="100"></progress>
+            <div class="progress-label"><span>Всего</span><span id="totalPercent"></span></div>
+            <progress id="totalProgress" value="0" max="100"></progress>
+            <div id="controls" class="btn-row">
+                <button type="button" id="pauseBtn" class="secondary">Пауза</button>
+                <button type="button" id="stopBtn" class="danger">Остановить</button>
+            </div>
+        </div>
+
+        <details id="debug">
+            <summary>Отладочная информация <span id="debugSummary"></span></summary>
+            <div class="stats-grid">
+                <span>Время</span><span id="stElapsed">—</span>
+                <span>Серии</span><span id="stEpisodes">—</span>
+                <span>Сегменты</span><span id="stSegments">—</span>
+                <span>Объём</span><span id="stBytes">—</span>
+                <span>Скорость</span><span id="stSpeed">—</span>
+                <span>Темп</span><span id="stPace">—</span>
+                <span>Предупреждения</span><span id="stWarnings">0</span>
+            </div>
+            <div class="log-head">
+                <span>Журнал</span>
+                <button type="button" id="copyLogBtn" class="link-btn">Копировать</button>
+            </div>
+            <div id="log"></div>
+        </details>
+    </section>
+</div>
+
+<script src="lib/m3u8-parser.min.js"></script>
+<script src="lib/mux.min.js"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

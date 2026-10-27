@@ -1,0 +1,307 @@
+/* Тёмная тема в духе DownloadLib: красный акцент (градиент как на значке) на графитовом фоне. */
+:root {
+    --bg: #252527;
+    --panel: #2e2e30;
+    --panel-dark: #1d1d1f;
+    --border: #3d3d3f;
+    --text: #f2f2f2;
+    --muted: #a5a5a8;
+    /* Градиент значка: #ff5a4a → #b3001b. */
+    --primary: #e3262f;            /* сплошной цвет: рамки, галочки */
+    --primary-text: #ff6b5e;       /* красный текст на тёмном фоне (светлее, чтобы читался) */
+    --primary-grad: linear-gradient(135deg, #ff5a4a, #b3001b);
+    --primary-grad-hover: linear-gradient(135deg, #f04536, #8e0015);
+    --danger: #ff8a80;
+    --warn: #ffb74d;
+    --error: #ef9a9a;
+    --ok: #81c784;
+    color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    padding: 14px;
+    background: var(--bg);
+    color: var(--text);
+    font: 14px/1.4 "Segoe UI", Arial, sans-serif;
+}
+
+#container {
+    max-width: 360px;
+    margin: 0 auto;
+}
+
+.hidden { display: none !important; }
+
+/* --- Шапка --------------------------------------------------------------- */
+#header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+.logo {
+    font-size: 20px;
+    letter-spacing: .3px;
+}
+.logo b {
+    background: var(--primary-grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* --- Кнопки и поля ------------------------------------------------------- */
+button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background: var(--primary-grad);
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+}
+button:hover:not(:disabled) { background: var(--primary-grad-hover); }
+button:disabled { background: #6a6a6c; cursor: not-allowed; }
+button.secondary { background: #4a4a4d; }
+button.secondary:hover:not(:disabled) { background: #5a5a5e; }
+/* «Остановить» — серая с красным текстом, чтобы не путать с основными кнопками. */
+button.danger { background: #4a4a4d; color: var(--danger); }
+button.danger:hover:not(:disabled) { background: #5a3d3e; }
+button.small { width: auto; padding: 5px 10px; font-size: 13px; }
+button.icon-btn {
+    width: auto;
+    padding: 6px;
+    background: transparent;
+    color: var(--muted);
+}
+button.icon-btn:hover:not(:disabled), button.icon-btn.active { background: var(--panel); color: var(--primary-text); }
+button.link-btn {
+    width: auto;
+    padding: 0;
+    background: none;
+    color: var(--primary-text);
+    font-size: 12px;
+}
+button.link-btn:hover:not(:disabled) { background: none; text-decoration: underline; }
+
+select, input[type="text"], input[type="number"] {
+    width: 100%;
+    padding: 6px 8px;
+    background: var(--panel-dark);
+    color: var(--text);
+    border: 1px solid #444;
+    border-radius: 4px;
+    font-size: 14px;
+}
+select:focus, input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary);
+    cursor: pointer;
+}
+
+label { color: var(--muted); font-size: 13px; }
+
+.row { margin-bottom: 10px; }
+.row > label { display: block; margin-bottom: 4px; }
+.check-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+.check-row > label { margin: 0; cursor: pointer; }
+
+.btn-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+/* --- Карточка тайтла ----------------------------------------------------- */
+#titleCard {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+#poster {
+    width: 72px;
+    height: 102px;
+    object-fit: cover;
+    border-radius: 4px;
+    background: var(--panel);
+    flex-shrink: 0;
+}
+#title { font-size: 15px; font-weight: 600; }
+#meta { color: var(--muted); font-size: 12px; margin-top: 4px; white-space: pre-line; }
+
+/* --- Сообщения ----------------------------------------------------------- */
+.message {
+    padding: 8px 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    background: var(--panel);
+    border-left: 3px solid var(--primary);
+}
+.message.error { border-left-color: var(--danger); color: var(--error); }
+.message.ok { border-left-color: var(--ok); }
+
+/* --- Диапазон серий ------------------------------------------------------ */
+#rangeBox { margin-bottom: 10px; }
+.range-labels, .range-selects {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+.range-labels { color: var(--muted); font-size: 13px; margin-bottom: 4px; text-align: center; }
+
+/* --- Папка --------------------------------------------------------------- */
+.dir-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.dir-name {
+    flex: 1;
+    min-width: 0;
+    padding: 6px 8px;
+    background: var(--panel-dark);
+    border: 1px solid #444;
+    border-radius: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 13px;
+}
+.dir-name.unset { color: var(--muted); }
+
+/* --- Сводка перед загрузкой ---------------------------------------------- */
+#infoPanel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--primary);
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin: 12px 0 10px;
+    font-size: 13px;
+}
+#infoPanel:empty { display: none; }
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 3px;
+}
+.info-row:last-child { margin-bottom: 0; }
+.info-row span:first-child { color: var(--muted); white-space: nowrap; }
+.info-row span:last-child { text-align: right; font-weight: 600; overflow-wrap: anywhere; }
+
+/* --- Ход загрузки -------------------------------------------------------- */
+#status {
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 13px;
+    min-height: 1.4em;
+    overflow-wrap: anywhere;
+}
+#status.ok { color: var(--ok); }
+#status.error { color: var(--error); }
+#status.warn { color: var(--warn); }
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 8px;
+}
+progress {
+    width: 100%;
+    height: 14px;
+    appearance: none;
+    border: none;
+    border-radius: 4px;
+    background: #4a4a4d;
+    overflow: hidden;
+}
+progress::-webkit-progress-bar { background: #4a4a4d; }
+progress::-webkit-progress-value { background: linear-gradient(90deg, #ff5a4a, #b3001b); }
+progress::-moz-progress-bar { background: linear-gradient(90deg, #ff5a4a, #b3001b); }
+
+/* --- Отладочная информация ----------------------------------------------- */
+#debug {
+    margin-top: 12px;
+    padding: 6px 8px;
+    background: var(--panel-dark);
+    border: 1px solid #3a3a3d;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #bdbdbd;
+}
+#debug > summary {
+    cursor: pointer;
+    color: #8a8a8a;
+    user-select: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#debug[open] > summary { margin-bottom: 6px; }
+#debug[open] #debugSummary { display: none; }
+#debugSummary { color: #6d6d6d; margin-left: 4px; }
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 2px 10px;
+}
+.stats-grid span:nth-child(odd) { color: #8a8a8a; }
+.stats-grid span:nth-child(even) {
+    color: #e0e0e0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-variant-numeric: tabular-nums;
+}
+
+.log-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    color: #8a8a8a;
+}
+#log {
+    margin-top: 4px;
+    height: 160px;
+    overflow-y: auto;
+    font: 11px/1.35 Consolas, "Courier New", monospace;
+}
+.log-row { overflow-wrap: anywhere; }
+.log-row time { color: #6d6d6d; margin-right: 4px; }
+.log-row.warn { color: var(--warn); }
+.log-row.error { color: var(--error); }
+.log-row.ok { color: var(--ok); }
+
+/* --- Настройки ----------------------------------------------------------- */
+#settingsView h2 { font-size: 16px; margin: 0 0 6px; }
+.hint { color: var(--muted); font-size: 12px; margin: 4px 0 10px; }
+.settings-grid {
+    display: grid;
+    grid-template-columns: 1fr 80px;
+    gap: 6px 8px;
+    align-items: center;
+    margin-bottom: 12px;
+}
+.settings-grid input { text-align: center; padding: 4px; }
+
+#openFolderBtn { width: 100%; margin: 4px 0 10px; }

@@ -1,0 +1,42 @@
+{
+    "manifest_version": 3,
+    "name": "AnimeLoader",
+    "version": "0.1.0",
+    "description": "Скачивает серии с YummyAnime и AnimeGO (плееры Kodik, Alloha, CVH, AniBoom): диапазон серий, озвучка, качество, папка назначения.",
+    "minimum_chrome_version": "111",
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_title": "AnimeLoader — скачать серии",
+        "default_icon": {
+            "16": "icons/icon16.png",
+            "32": "icons/icon32.png",
+            "48": "icons/icon48.png"
+        }
+    },
+    "icons": {
+        "16": "icons/icon16.png",
+        "32": "icons/icon32.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+    },
+    "permissions": [
+        "storage",
+        "downloads",
+        "declarativeNetRequestWithHostAccess",
+        "unlimitedStorage"
+    ],
+    "host_permissions": [
+        "https://*/*"
+    ],
+    "content_scripts": [
+        {
+            "matches": ["https://alloha.yani.tv/*", "https://*.alloha.tv/*"],
+            "js": ["content/alloha-hook.js"],
+            "all_frames": true,
+            "run_at": "document_start",
+            "world": "MAIN"
+        }
+    ]
+}

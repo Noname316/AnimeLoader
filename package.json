@@ -1,0 +1,16 @@
+{
+    "name": "animeloader",
+    "version": "0.1.0",
+    "private": true,
+    "license": "MIT",
+    "description": "Браузерное расширение: скачивание серий с YummyAnime и AnimeGO (Kodik, Alloha, CVH, AniBoom)",
+    "type": "module",
+    "scripts": {
+        "test": "node --test tests/unit.test.mjs tests/players.test.mjs",
+        "e2e": "node tests/e2e.mjs",
+        "icons": "node tests/make-icons.mjs"
+    },
+    "devDependencies": {
+        "puppeteer-core": "^24.43.1"
+    }
+}
